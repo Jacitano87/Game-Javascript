@@ -1,0 +1,170 @@
+<html>
+<head><title>Compito web programming</title>
+<script language="Javascript">
+
+
+var idsess="HBTO5AB";
+for(var k=0;k<25;k++)
+{
+valore=Math.floor(Math.random()*9);
+idsess=idsess+valore;
+}
+
+function creatabella()
+{
+
+
+	for(var i=0;i<10;i++)
+	{
+		for (var j = 0; j < 10; j++)
+		{
+		
+		var cella=document.createElement('div');
+		if(j==0)	
+		cella.setAttribute('style','width:40px;height:40px;border:1px solid black;float:left;clear:left;');
+		else	
+		cella.setAttribute('style','width:40px;height:40px;border:1px solid black;float:left;');
+			cella.setAttribute('id',i+','+j);
+		document.body.appendChild(cella);
+		}
+		
+		
+		
+	}
+	
+	for(var i=0;i<10;i++)
+		{
+		for(var j=0;j<10;j++)
+		{
+		var random=Math.floor(Math.random()*5);
+		if(random==0)
+		document.getElementById(i+","+j).style.backgroundColor='black';
+		else
+		document.getElementById(i+","+j).style.backgroundColor='white';
+		
+		}
+	}
+	document.getElementById('0,0').style.backgroundColor='red';
+	document.getElementById('9,9').style.backgroundColor='green';
+	movimento(0,0);   //mi sn dimenticato di passare i parametri
+}
+
+
+var mosse=0;
+function movimento(pos_x,pos_y)
+{
+var i=pos_x;
+var j=pos_y;
+
+if((pos_x==9)&&(pos_y==9))
+{
+alert("gioco finito... il numero di mosse è pari a: "+mosse);
+}
+else
+{ 
+//BASSO
+var ini=i;
+var inj=j;
+if((++ini<10)&&(document.getElementById((ini)+","+(inj)).style.backgroundColor!='black'))
+{i++;
+if(document.getElementById((ini)+","+(inj)).style.backgroundColor!='yellow')
+{
+inviodatiAjax(i,j);
+document.getElementById(i+","+j).style.backgroundColor='red';
+document.getElementById(pos_x+","+pos_y).style.backgroundColor='yellow';
+pos_x=i;
+pos_y=j;
+mosse++;
+setTimeout('movimento('+pos_x+','+pos_y+')',2000);
+return
+}
+
+} 
+i=pos_x;
+j=pos_y;
+//DESTRA
+var ini=i;
+var inj=j;
+if((++inj<10)&&(document.getElementById((ini)+","+(inj)).style.backgroundColor!='black'))
+{ j++;
+if(document.getElementById((ini)+","+(inj)).style.backgroundColor!='yellow')
+{
+inviodatiAjax(i,j);
+document.getElementById(i+","+j).style.backgroundColor='red';
+document.getElementById(pos_x+","+pos_y).style.backgroundColor='yellow';
+pos_x=i;
+pos_y=j;
+mosse++;
+setTimeout('movimento('+pos_x+','+pos_y+')',2000);
+return
+}
+}
+i=pos_x;
+j=pos_y;
+//ALTO
+var ini=i;
+var inj=j;
+if((--ini>=0)&&(document.getElementById((ini)+","+inj).style.backgroundColor!='black'))
+{i--;
+inviodatiAjax(i,j);
+document.getElementById(i+","+j).style.backgroundColor='red';
+document.getElementById(pos_x+","+pos_y).style.backgroundColor='yellow';
+poos_x=i;
+poos_y=j;
+mosse++;
+setTimeout('movimento('+poos_x+','+poos_y+')',2000);
+return
+}
+i=pos_x;
+j=pos_y;
+//SINISTRA
+var ini=i;
+var inj=j;
+if((--inj>=0)&&(document.getElementById(ini+","+(inj)).style.backgroundColor!='black'))
+{j--;
+inviodatiAjax(i,j);
+document.getElementById(i+","+j).style.backgroundColor='red';
+document.getElementById(pos_x+","+pos_y).style.backgroundColor='yellow';
+poos_x=i;
+poos_y=j;
+mosse++;
+setTimeout('movimento('+poos_x+','+poos_y+')',2000);
+return
+}
+alert("Non vi è soluzione...premi F5 per iniziare una nuova partita");
+}
+}
+function inviodatiAjax(X,Y)
+{
+http=getXMLHTTPRequest();
+http.open("GET","setPosition.php?xpos="+X+"&ypos="+Y+"&sessionID="+idsess,true);
+http.onreadystatechange = function ()
+{
+if(http.readystate == 4)
+{
+
+}
+
+}
+
+http.send(null);
+}
+function getXMLHTTPRequest()
+{
+     if (typeof XMLHttpRequest != 'undefined') {
+     return new XMLHttpRequest();
+     }
+     try {
+     return new ActiveXObject("Msxml2.XMLHTTP");
+     } catch (e) {
+     try {
+     return new ActiveXObject("Microsoft.XMLHTTP");
+     } catch (e) {}
+     }
+     return false;
+}
+</script>
+</head>
+<body onLoad="creatabella()">
+</body>
+</html>
